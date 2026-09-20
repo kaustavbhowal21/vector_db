@@ -12,7 +12,7 @@ class VectorStoreIO {
 public : 
 template <typename T>
 static std::vector<VectorRecord<T>>
-read_vec(const std::string& filename)
+read_vecs(const std::string& filename)
 {
   
     std::ifstream file(filename, std::ios::binary);
@@ -33,23 +33,20 @@ read_vec(const std::string& filename)
         int32_t dimension;
 
         
-        file.read(
-            reinterpret_cast<char*>(&dimension),
-            sizeof(dimension)
-        );
+      file.read(
+    reinterpret_cast<char*>(&dimension),
+    sizeof(dimension)
+);
 
-        if (file.eof()) 
-        {
-            break;
-        }
+if (file.gcount() == 0 && file.eof()) {
+    break;
+}
 
-        if (!file)
-         {
-            throw std::runtime_error(
-                "Error while reading dimension from: " + filename
-            );
-        }
-
+if (file.gcount() != sizeof(dimension)) {
+    throw std::runtime_error(
+        "Incomplete vector dimension in: " + filename
+    );
+}
 
 
         if (dimension <= 0) 

@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
         cout << "Loading dataset-\n";
 
         auto dataset =
-            VectorStoreIO::read_vec<float>(
+            VectorStoreIO::read_vecs<float>(
                 base_file
             );
 

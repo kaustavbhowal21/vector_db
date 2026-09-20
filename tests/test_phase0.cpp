@@ -1,4 +1,4 @@
-#include <cassert>
+#include <stdexcept>
 #include <iostream>
 #include <string>
 #include <cstdint>
@@ -23,19 +23,20 @@ int main(int argc, char* argv[])
 
         std::cout<< "1. Loading dataset--\n";
 
-        auto dataset = VectorStoreIO::read_vec<float>(base_file);
-        auto queries = VectorStoreIO::read_vec<float>(query_file);
+        auto dataset = VectorStoreIO::read_vecs<float>(base_file);
+        auto queries = VectorStoreIO::read_vecs<float>(query_file);
 
-        auto ground_truth =VectorStoreIO::read_vec<int32_t>(groundtruth_file);
-        assert(queries.size() == 100);
-        assert(ground_truth.size() == 100);
+        auto ground_truth =VectorStoreIO::read_vecs<int32_t>(groundtruth_file);
+        if (queries.size() != 100)
+      throw std::runtime_error("Expected 100 query vectors.");
+        if (ground_truth.size() != 100)
+    throw std::runtime_error("Expected 100 ground-truth records.");
       
 
         std::cout<< "    Loaded: "<< dataset.size()<< " vectors\n";
 
-        assert(
-            dataset.size() == 10000
-        );
+       if (dataset.size() != 10000)
+    throw std::runtime_error("Expected 10000 base vectors.");
 
 
 
@@ -43,16 +44,19 @@ int main(int argc, char* argv[])
 
         for (const auto& record : dataset) {
 
-            assert(record.dimension() == 128);
+            if (record.dimension() != 128)
+    throw std::runtime_error("Base vector has incorrect dimension.");
         }
 
         for (const auto& record : queries) {
         
-            assert(record.dimension() == 128); 
+           if (record.dimension() != 128)
+    throw std::runtime_error("Query vector has incorrect dimension."); 
 }
         for (const auto& record : ground_truth) {
    
-            assert(record.dimension() == 100);
+            if (record.dimension() != 100)
+    throw std::runtime_error("Ground-truth record has incorrect dimension.");
 }
 
 
@@ -65,9 +69,8 @@ int main(int argc, char* argv[])
 
         for (size_t i = 0;i < dataset.size();++i)
         {
-            assert(
-                dataset[i].id == static_cast<int>(i)
-            );
+          if (dataset[i].id != static_cast<int>(i))
+    throw std::runtime_error("Vector ID is incorrect.");
         }
 
         std::cout<< "   IDs are correct\n";
@@ -83,10 +86,8 @@ int main(int argc, char* argv[])
         float distance =
             squared_l2(a, b);
 
-
-        assert(
-            distance == 14.0f
-        );
+if (distance != 14.0f)
+    throw std::runtime_error("Squared L2 calculation is incorrect.");
 
         std::cout<< "    squared L2 works\n";
 
@@ -114,7 +115,8 @@ double average_recall = total_recall / queries.size();
 
 std::cout << "Average Recall@100: " << average_recall << "\n";
 
-assert(average_recall == 1.0);
+if (average_recall != 1.0)
+    throw std::runtime_error("Recall@100 is not 1.0.");
     
 
     
