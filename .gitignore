@@ -1,0 +1,28 @@
+# Build directory
+build/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# Ninja generated files
+.ninja_deps
+.ninja_log
+build.ninja
+
+# Compiled binaries
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+
+# Debug files
+*.pdb
+
+# VS Code
+.vscode/
