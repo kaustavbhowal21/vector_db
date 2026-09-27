@@ -16,6 +16,7 @@ include_directories(include)
 add_executable(vector_search
     src/main.cpp
     src/search.cpp
+    src/mmap_arena.cpp
 )
 
 add_executable(test_phase0
